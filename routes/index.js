@@ -3,13 +3,41 @@ const router = express.Router();
 // could use one line instead: const router = require('express').Router();
 const tweetBank = require('../tweetBank');
 
-router.get('/', function (req, res) {
-  let tweets = tweetBank.list();
-  res.render( 'index', { tweets: tweets } );
-});
+module.exports = function (io) {
 
-// router.get('/stylesheets/style.css', function(req, res){
-//     res.sendFile(__dirname + '/../public/stylesheets/style.css')
-// })
+  // io.on('connection', (socket) => {
+  //   console.log(socket.id);
+  //   socket.on('newTweet', (tweet) => {
 
-module.exports = router;
+  //   })
+  // })
+
+  router.get('/', function (req, res) {
+    let tweets = tweetBank.list();
+    // io.sockets.emit('newTweet', { name, text });
+    res.render( 'index', { tweets: tweets, showForm: true } );
+  });
+
+  router.get('/users/:name', (req, res) => {
+    let name = req.params.name;
+    let list = tweetBank.find( { name } );
+    res.render('index', { tweets: list, showForm: true, showName: true })
+  });
+
+  router.post('/tweets', function(req, res) {
+    var name = req.body.name;
+    var text = req.body.text;
+    tweetBank.add(name, text);
+    console.log('in the post route!', { name, text }, 'io: ', io)
+    res.redirect('/');
+  });
+
+  router.get('/tweets/:id', (req, res) => {
+    let id = req.params.id;
+    let list = tweetBank.find( { id } );
+    console.log(id);
+    res.render('index', { tweets: list })
+  });
+
+  return router;
+}

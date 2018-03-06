@@ -57,3 +57,14 @@ code {
 .content .by {
   font-weight: bold;
 }
+
+#tweets > li {
+  list-style: none;
+  color: #4798d4;
+  padding-bottom: 3px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1em;
+}
