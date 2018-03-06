@@ -1,17 +1,65 @@
 const express = require( 'express' );
+
+const nunjucks = require( 'nunjucks');
 const volleyball = require('volleyball');
+const routes = require('./routes');
 const app = express(); // creates an instance of an express application
+app.set('view engine', 'html'); // have res.render work with html files
+app.engine('html', nunjucks.render);
+nunjucks.configure('views', {noCache: true});
 
 app.listen(3000, () => console.log('server listening'));
 
 app.use(volleyball);
+app.use('/', routes);
 
-app.use('/special', (req, res, next) => {
-  console.log(req.method, req.path);
-  console.log('you found the special thing');
-  next();
-});
+// app.use('/stylesheets/style.', function(req, res){
+//   res.sendFile(__dirname + '/public')
+// })
 
-app.get('/', (req, res, next) => {
-  res.send('Hello, world!');
-});
+app.use(express.static(__dirname + '/public'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// app.use('/special', (req, res, next) => {
+//   console.log(req.method, req.path);
+//   console.log('you found the special thing');
+//   next();
+// });
+
+// const people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+
+
+// app.get('/', (req, res, next) => {
+
+//   res.render( 'index', {title: 'Hall of Fame', people: people} );
+
+// });
+
